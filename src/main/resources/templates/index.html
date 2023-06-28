@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html>
+    <head>
+        <title>Inicio</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    </head>
+    <body class="container py-5">
+    <div class="p-5 bg-light rounded shadow mb-5"
+        style="background: url('/profil_details.svg') no-repeat right; background-size: contain">
+        <h1 class="text-primary display-5">Bienvenido a MiAgenda</h1>
+        <p class="fw-bold mt-3">
+            Con esta aplicación podrás gestionar tu agenda virtual
+        </p>
+        <p>Consula, crea, actualiza o elimina tus contactos de forma fácil y segura</p>
+    </div>
+        <h3>Mis contactos</h3>
+        <div class="alert alert-success alert-dismissible nt-3" th:if="${msgExito ne null}">
+            
+            [[${msgExito}]]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            
+        </div>
+        <div class="text-end">
+            <a href="/nuevo" class="btn btn-primary"><i class="fa fa-plus"></i>Registrar Contacto</a>
+        </div>
+        <form action="" autocomplete="off">
+            <div class="row">
+                <div class="col-lg-3 col-md-4">
+                    <div class="input-group mb-3">
+                        <button class="btn btn-primary" type="submit" id="button-addon1"><i class="fa fa-search"></i></button>
+                        <input type="text" name="busqueda" class="form-control" placeholder="Buscar por nombre" th:value="${param.busqueda}">
+                    </div>
+                </div>
+            </div>
+
+        </form>
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Fecha Nacimiento</th>
+                    <th>Celular</th>
+                    <th>Email</th>
+                    <th>Fecha Registro</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="contacto : ${contactos}" th:object="${contacto}">
+                    <td th:text="*{id}"></td>
+                    <td th:text="*{nombre}"></td>
+                    <td th:text="*{#temporals.format(fechaNacimiento, 'dd/MM/YYYY')}"></td>
+                    <td th:text="*{celular}"></td>
+                    <td th:text="*{email}"></td>
+                    <td th:text="*{#temporals.format(fechaRegistro,'dd/MM/YYYY hh:mm a')}"></td>
+                    <td>
+                        <div class="btn-group btn-group-sm">
+                            <a th:href="@{/{idContacto}/editar(idContacto=*{id})}" class="btn btn-primary"><i class="fa fa-edit"></i></a>
+                            <button class="btn btn-danger" onclick="eliminarContacto(this)"><i class="fa fa-trash"></i></button>
+                            <form th:action="@{/{idContacto}/eliminar(idContacto=*{id})}" method='post'>
+                                
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div sd:pagination-summary=""></div>
+            </div>
+            <div class="col-sm-6">
+                <nav class="pull-right">
+                    <ul class="pagination" sd:pagination="full">
+                        <!-- Pagination created by SpringDataDialect, this content is just for mockup -->
+                        <li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+                        <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+        <script>
+            function eliminarContacto(element){
+               let ok = confirm('¿Estas seguro de eliminar este registro?');
+               
+               if(ok){
+                   element.nextElementSibling.submit();
+               }
+            }
+        </script>
+    </body>
+</html>
